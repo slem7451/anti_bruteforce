@@ -1,5 +1,8 @@
 DOCKER_APP_IMG="anti-bruteforce"
 
+build:
+	go build -o ./bin/app ./cmd/app
+
 test:
 	go test -race -count 100 ./...
 
@@ -22,3 +25,5 @@ up:
 
 down:
 	docker compose -f deployments/docker-compose.yml -d down
+
+.PHONY: build
