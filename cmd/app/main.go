@@ -45,11 +45,19 @@ func main() {
 		log.Fatalf("App: error - %s", err)
 	}
 
+	/*fmt.Println(app.AddToBlacklist(ctx, "192.1.1.1/32"))
+	fmt.Println(app.AddToWhitelist(ctx, "192.1.1.2/32"))*/
+	/*fmt.Println(app.DeleteFromWhitelist(ctx, "192.1.1.2/32"))
+	fmt.Println(app.DeleteFromBlacklist(ctx, "192.1.1.1/32"))*/
+
+	/*fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "192.1.1.1", Login: "lll1", Password: "pswd1"}))
+	fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "192.1.1.2", Login: "lll2", Password: "pswd2"}))*/
+
 	for i := 0; i < 11; i++ {
-		fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "1921", Login: "lll1", Password: "pswd1"}))
+		fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "192.1.1.3", Login: "lll1", Password: "pswd1"}))
 	}
 
-	fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "1921", Login: "lll2", Password: "pswd2"}))
-	fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "1922", Login: "lll1", Password: "pswd1"}))
-	fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "1922", Login: "lll2", Password: "pswd1"}))
+	fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "192.1.1.3", Login: "lll2", Password: "pswd2"}))
+	fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "192.1.1.4", Login: "lll1", Password: "pswd1"}))
+	fmt.Println(app.ValidateAuth(ctx, request.Credits{IP: "192.1.1.4", Login: "lll2", Password: "pswd1"}))
 }

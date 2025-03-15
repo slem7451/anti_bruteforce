@@ -67,17 +67,9 @@ func (a *App)ValidateAuth(ctx context.Context, req request.Credits) (bool, error
 		return false, err
 	}
 
-	if isIPLimited {
-		return false, nil
-	}
-
 	isLoginLimited, err := a.rdb.IsLoginInLimit(ctx, req.Login, a.loginLim)
 	if err != nil {
 		return false, err
-	}
-
-	if isLoginLimited {
-		return false, nil
 	}
 
 	isPasswordLimited, err := a.rdb.IsPasswordInLimit(ctx, req.Password, a.passwordLim)
@@ -85,9 +77,21 @@ func (a *App)ValidateAuth(ctx context.Context, req request.Credits) (bool, error
 		return false, err
 	}
 
-	if isPasswordLimited {
-		return false, nil
-	}
+	return !isIPLimited && !isLoginLimited && !isPasswordLimited, nil
+}
 
-	return true, nil
+func (a *App)AddToBlacklist(ctx context.Context, subnet string) error {
+	return a.db.AddToBlacklist(ctx, subnet)
+}
+
+func (a *App)DeleteFromBlacklist(ctx context.Context, subnet string) error {
+	return a.db.DeleteFromBlacklist(ctx, subnet)
+}
+
+func (a *App)AddToWhitelist(ctx context.Context, subnet string) error {
+	return a.db.AddToWhitelist(ctx, subnet)
+}
+
+func (a *App)DeleteFromWhitelist(ctx context.Context, subnet string) error {
+	return a.db.DeleteFromWhitelist(ctx, subnet)
 }
