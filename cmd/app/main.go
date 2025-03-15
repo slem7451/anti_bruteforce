@@ -9,9 +9,9 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/slem7451/anti_bruteforce/internal/app"
-	"github.com/slem7451/anti_bruteforce/internal/pgsql"
-	"github.com/slem7451/anti_bruteforce/internal/redis"
-	"github.com/slem7451/anti_bruteforce/internal/request"
+	"github.com/slem7451/anti_bruteforce/internal/entity/request"
+	"github.com/slem7451/anti_bruteforce/internal/storage/pgsql"
+	"github.com/slem7451/anti_bruteforce/internal/storage/redis"
 )
 
 func init() {

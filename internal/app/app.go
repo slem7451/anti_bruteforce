@@ -5,20 +5,18 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/slem7451/anti_bruteforce/internal/pgsql"
-	"github.com/slem7451/anti_bruteforce/internal/redis"
-	"github.com/slem7451/anti_bruteforce/internal/request"
+	"github.com/slem7451/anti_bruteforce/internal/entity/request"
 )
 
 type App struct {
-	rdb *redis.Client
-	db *pgsql.Client
+	rdb limiter
+	db list
 	loginLim int
 	ipLim int
 	passwordLim int
 }
 
-func NewApp(rdb *redis.Client, db *pgsql.Client) (*App, error) {
+func NewApp(rdb limiter, db list) (*App, error) {
 	loginLim, err := strconv.Atoi(os.Getenv("MAX_LOGIN"))
 	if err != nil {
 		return nil, err
