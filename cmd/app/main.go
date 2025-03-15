@@ -6,7 +6,6 @@ import (
 	"log"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/slem7451/anti_bruteforce/internal/app"
@@ -24,8 +23,6 @@ func init() {
 }
 
 func main() {
-	time.Sleep(2 * time.Second)
-	
 	ctx, cancel := signal.NotifyContext(context.Background(),
 		syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	defer cancel()
