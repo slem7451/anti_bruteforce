@@ -78,6 +78,10 @@ func (a *App)ValidateAuth(ctx context.Context, req request.Credits) (bool, error
 	return !isIPLimited && !isLoginLimited && !isPasswordLimited, nil
 }
 
+func (a *App)RemoveLimit(ctx context.Context, req request.Credits) error {
+	return a.rdb.RemoveLimit(ctx, req.Login, req.IP)
+}
+
 func (a *App)AddToBlacklist(ctx context.Context, subnet string) error {
 	return a.db.AddToBlacklist(ctx, subnet)
 }

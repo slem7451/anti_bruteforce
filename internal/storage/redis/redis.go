@@ -45,7 +45,7 @@ func NewClient(ctx context.Context) (*Client, error) {
 func (c *Client)isFieldInLimit(ctx context.Context, prefix, field string, lim int) (bool, error) {
 	key := prefix + "_" + field
 
-	res, err := c.db.Get(ctx, key).Result()
+	res, err := c.db.Get(ctx, key).Int()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -59,17 +59,16 @@ func (c *Client)isFieldInLimit(ctx context.Context, prefix, field string, lim in
 		return false, nil
 	}
 
-	resInt, err := strconv.Atoi(res)
 	if err != nil {
 		return false, err
 	}
 
-	err = c.db.Set(ctx, key, resInt + 1, c.ttl).Err()
+	err = c.db.Set(ctx, key, res + 1, c.ttl).Err()
 	if err != nil {
 		return false, err
 	}
 
-	return resInt >= lim, nil
+	return res >= lim, nil
 }
 
 func (c *Client)IsIPInLimit(ctx context.Context, ip string, ipLim int) (bool, error) {
@@ -82,4 +81,8 @@ func (c *Client)IsLoginInLimit(ctx context.Context, login string, loginLim int) 
 
 func (c *Client)IsPasswordInLimit(ctx context.Context, password string, passwordLim int) (bool, error) {
 	return c.isFieldInLimit(ctx, "password", password, passwordLim)
+}
+
+func (c *Client)RemoveLimit(ctx context.Context, login, ip string) error {
+	return c.db.Del(ctx, "ip_" + ip, "login_" + login).Err()
 }

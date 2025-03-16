@@ -15,4 +15,5 @@ type limiter interface{
 	IsIPInLimit(context.Context, string, int) (bool, error)
 	IsLoginInLimit(context.Context, string, int) (bool, error)
 	IsPasswordInLimit(context.Context, string, int) (bool, error)
+	RemoveLimit(context.Context, string, string) error
 }
