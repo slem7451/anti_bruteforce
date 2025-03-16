@@ -11,7 +11,7 @@ type list interface {
 	DeleteFromWhitelist(context.Context, string) error
 }
 
-type limiter interface{
+type limiter interface {
 	IsIPInLimit(context.Context, string, int) (bool, error)
 	IsLoginInLimit(context.Context, string, int) (bool, error)
 	IsPasswordInLimit(context.Context, string, int) (bool, error)

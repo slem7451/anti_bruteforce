@@ -9,10 +9,10 @@ import (
 )
 
 type App struct {
-	rdb limiter
-	db list
-	loginLim int
-	ipLim int
+	rdb         limiter
+	db          list
+	loginLim    int
+	ipLim       int
 	passwordLim int
 }
 
@@ -33,15 +33,15 @@ func NewApp(rdb limiter, db list) (*App, error) {
 	}
 
 	return &App{
-		rdb: rdb,
-		db: db,
-		loginLim: loginLim,
-		ipLim: ipLim,
+		rdb:         rdb,
+		db:          db,
+		loginLim:    loginLim,
+		ipLim:       ipLim,
 		passwordLim: passwordLim,
 	}, nil
 }
 
-func (a *App)ValidateAuth(ctx context.Context, req request.Credits) (bool, error) {
+func (a *App) ValidateAuth(ctx context.Context, req request.Credits) (bool, error) {
 	isBlack, err := a.db.IsIPInBlacklist(ctx, req.IP)
 	if err != nil {
 		return false, err
@@ -78,22 +78,22 @@ func (a *App)ValidateAuth(ctx context.Context, req request.Credits) (bool, error
 	return !isIPLimited && !isLoginLimited && !isPasswordLimited, nil
 }
 
-func (a *App)RemoveLimit(ctx context.Context, req request.Credits) error {
+func (a *App) RemoveLimit(ctx context.Context, req request.Credits) error {
 	return a.rdb.RemoveLimit(ctx, req.Login, req.IP)
 }
 
-func (a *App)AddToBlacklist(ctx context.Context, subnet string) error {
+func (a *App) AddToBlacklist(ctx context.Context, subnet string) error {
 	return a.db.AddToBlacklist(ctx, subnet)
 }
 
-func (a *App)DeleteFromBlacklist(ctx context.Context, subnet string) error {
+func (a *App) DeleteFromBlacklist(ctx context.Context, subnet string) error {
 	return a.db.DeleteFromBlacklist(ctx, subnet)
 }
 
-func (a *App)AddToWhitelist(ctx context.Context, subnet string) error {
+func (a *App) AddToWhitelist(ctx context.Context, subnet string) error {
 	return a.db.AddToWhitelist(ctx, subnet)
 }
 
-func (a *App)DeleteFromWhitelist(ctx context.Context, subnet string) error {
+func (a *App) DeleteFromWhitelist(ctx context.Context, subnet string) error {
 	return a.db.DeleteFromWhitelist(ctx, subnet)
 }

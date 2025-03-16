@@ -23,8 +23,8 @@ func requestToStruct(req *pb.Credits, isAuthMethod bool) (request.Credits, error
 	}
 
 	return request.Credits{
-		IP: req.GetIp(),
-		Login: req.GetLogin(),
+		IP:       req.GetIp(),
+		Login:    req.GetLogin(),
 		Password: req.GetPassword(),
 	}, nil
 }
@@ -54,13 +54,13 @@ func validateCredits(req *pb.Credits, isAuthMethod bool) error {
 func errResponse(err error) *pb.Response {
 	errStr := err.Error()
 
-	return &pb.Response {
-		Ok: false,
+	return &pb.Response{
+		Ok:  false,
 		Msg: &errStr,
 	}
 }
 
-func (s *service)Auth(ctx context.Context, req *pb.Credits) (*pb.Response, error) {
+func (s *service) Auth(ctx context.Context, req *pb.Credits) (*pb.Response, error) {
 	credits, err := requestToStruct(req, true)
 	if err != nil {
 		return errResponse(err), nil
@@ -76,7 +76,7 @@ func (s *service)Auth(ctx context.Context, req *pb.Credits) (*pb.Response, error
 	}, nil
 }
 
-func (s *service)Reset(ctx context.Context, req *pb.Credits) (*pb.Response, error) {
+func (s *service) Reset(ctx context.Context, req *pb.Credits) (*pb.Response, error) {
 	credits, err := requestToStruct(req, false)
 	if err != nil {
 		return errResponse(err), nil
@@ -92,7 +92,7 @@ func (s *service)Reset(ctx context.Context, req *pb.Credits) (*pb.Response, erro
 	}, nil
 }
 
-func (s *service)AddToBlacklist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
+func (s *service) AddToBlacklist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
 	if req.GetSubnet() == "" {
 		return errResponse(errSubnetRequired), nil
 	}
@@ -107,7 +107,7 @@ func (s *service)AddToBlacklist(ctx context.Context, req *pb.Subnet) (*pb.Respon
 	}, nil
 }
 
-func (s *service)DeleteFromBlacklist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
+func (s *service) DeleteFromBlacklist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
 	if req.GetSubnet() == "" {
 		return errResponse(errSubnetRequired), nil
 	}
@@ -122,7 +122,7 @@ func (s *service)DeleteFromBlacklist(ctx context.Context, req *pb.Subnet) (*pb.R
 	}, nil
 }
 
-func (s *service)AddToWhitelist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
+func (s *service) AddToWhitelist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
 	if req.GetSubnet() == "" {
 		return errResponse(errSubnetRequired), nil
 	}
@@ -137,7 +137,7 @@ func (s *service)AddToWhitelist(ctx context.Context, req *pb.Subnet) (*pb.Respon
 	}, nil
 }
 
-func (s *service)DeleteFromWhitelist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
+func (s *service) DeleteFromWhitelist(ctx context.Context, req *pb.Subnet) (*pb.Response, error) {
 	if req.GetSubnet() == "" {
 		return errResponse(errSubnetRequired), nil
 	}

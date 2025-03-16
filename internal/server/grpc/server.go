@@ -25,7 +25,7 @@ func NewServer(app server.App) *Server {
 	}
 }
 
-func (s *Server)Start(_ context.Context) error {
+func (s *Server) Start(_ context.Context) error {
 	listener, err := net.Listen("tcp", os.Getenv("GRPC_ADDRESS"))
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (s *Server)Start(_ context.Context) error {
 	return s.Server.Serve(listener)
 }
 
-func (s *Server)Stop(_ context.Context) error {
+func (s *Server) Stop(_ context.Context) error {
 	s.Server.GracefulStop()
 	return nil
 }

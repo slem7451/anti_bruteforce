@@ -8,8 +8,8 @@ import (
 	"net"
 	"os"
 
-	_ "github.com/jackc/pgx/stdlib" //nolint:depguard
-	"github.com/jmoiron/sqlx"       //nolint:depguard
+	_ "github.com/jackc/pgx/stdlib" // init pgx
+	"github.com/jmoiron/sqlx"
 	"github.com/pressly/goose/v3"
 	"github.com/slem7451/anti_bruteforce/migrations"
 )
@@ -52,7 +52,7 @@ func NewClient(ctx context.Context) (*Client, error) {
 	return &Client{db: db, conn: conn}, nil
 }
 
-func (c *Client)isSubnetInList(ctx context.Context, subnet string, listType string) (bool, error) {
+func (c *Client) isSubnetInList(ctx context.Context, subnet string, listType string) (bool, error) {
 	row := c.conn.QueryRowContext(ctx, `select subnet from ips where type = $1 and subnet = $2`, listType, subnet)
 	var searchedSubnet string
 
@@ -64,14 +64,16 @@ func (c *Client)isSubnetInList(ctx context.Context, subnet string, listType stri
 	return searchedSubnet != "", nil
 }
 
-func (c *Client)isIPInList(ctx context.Context, ip string, listType string) (bool, error) {
+func (c *Client) isIPInList(ctx context.Context, ip string, listType string) (bool, error) {
 	rows, err := c.conn.QueryContext(ctx, `select subnet from ips where type = $1`, listType)
 	if err != nil {
 		return false, err
 	}
 	defer rows.Close()
+	if rows.Err() != nil {
+		return false, err
+	}
 
-	
 	for rows.Next() {
 		var searchedSubnet string
 
@@ -103,20 +105,20 @@ func (c *Client)isIPInList(ctx context.Context, ip string, listType string) (boo
 	return false, nil
 }
 
-func (c *Client)IsIPInBlacklist(ctx context.Context, ip string) (bool, error) {
+func (c *Client) IsIPInBlacklist(ctx context.Context, ip string) (bool, error) {
 	return c.isIPInList(ctx, ip, blacklistType)
 }
 
-func (c *Client)IsIPInWhitelist(ctx context.Context, ip string) (bool, error) {
+func (c *Client) IsIPInWhitelist(ctx context.Context, ip string) (bool, error) {
 	return c.isIPInList(ctx, ip, whitelistType)
 }
 
-func (c *Client)deleteFromList(ctx context.Context, subnet string, listType string) error {
+func (c *Client) deleteFromList(ctx context.Context, subnet string, listType string) error {
 	_, err := c.conn.ExecContext(ctx, `delete from ips where subnet = $1 and type = $2`, subnet, listType)
 	return err
 }
 
-func (c *Client)addToList(ctx context.Context, subnet string, listType string) error {
+func (c *Client) addToList(ctx context.Context, subnet string, listType string) error {
 	isInList, err := c.isSubnetInList(ctx, subnet, listType)
 	if err != nil {
 		return err
@@ -130,18 +132,18 @@ func (c *Client)addToList(ctx context.Context, subnet string, listType string) e
 	return err
 }
 
-func (c *Client)AddToWhitelist(ctx context.Context, subnet string) error {
+func (c *Client) AddToWhitelist(ctx context.Context, subnet string) error {
 	return c.addToList(ctx, subnet, whitelistType)
 }
 
-func (c *Client)AddToBlacklist(ctx context.Context, subnet string) error {
+func (c *Client) AddToBlacklist(ctx context.Context, subnet string) error {
 	return c.addToList(ctx, subnet, blacklistType)
 }
 
-func (c *Client)DeleteFromBlacklist(ctx context.Context, subnet string) error {
+func (c *Client) DeleteFromBlacklist(ctx context.Context, subnet string) error {
 	return c.deleteFromList(ctx, subnet, blacklistType)
 }
 
-func (c *Client)DeleteFromWhitelist(ctx context.Context, subnet string) error {
+func (c *Client) DeleteFromWhitelist(ctx context.Context, subnet string) error {
 	return c.deleteFromList(ctx, subnet, whitelistType)
 }

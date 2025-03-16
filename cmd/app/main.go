@@ -15,7 +15,6 @@ import (
 
 func init() {
 	err := godotenv.Load("configs/.app.env")
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,32 +26,30 @@ func main() {
 	defer cancel()
 
 	redisC, err := redis.NewClient(ctx)
-
 	if err != nil {
-		log.Fatalf("Redis: error - %s", err)
+		log.Fatalf("Redis: error - %s", err) //nolint:gocritic
 	}
 
 	pgC, err := pgsql.NewClient(ctx)
-
 	if err != nil {
 		log.Fatalf("PostgreSQL: error - %s", err)
 	}
 
 	app, err := app.NewApp(redisC, pgC)
-
 	if err != nil {
 		log.Fatalf("App: error - %s", err)
 	}
 
 	server := grpc.NewServer(app)
 
-	go func () {
+	go func() {
 		if err := server.Start(ctx); err != nil {
+			cancel()
 			log.Fatalf("Server: start error - %s", err)
 		}
 	}()
 
-	go func () {
+	go func() {
 		<-ctx.Done()
 
 		if err := server.Stop(ctx); err != nil {
