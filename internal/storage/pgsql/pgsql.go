@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"log"
-	"net"
 	"os"
 
 	_ "github.com/jackc/pgx/stdlib" // init pgx
@@ -65,44 +64,15 @@ func (c *Client) isSubnetInList(ctx context.Context, subnet string, listType str
 }
 
 func (c *Client) isIPInList(ctx context.Context, ip string, listType string) (bool, error) {
-	rows, err := c.conn.QueryContext(ctx, `select subnet from ips where type = $1`, listType)
-	if err != nil {
-		return false, err
-	}
-	defer rows.Close()
-	if rows.Err() != nil {
-		return false, err
-	}
+	row := c.conn.QueryRowContext(ctx, `select subnet from ips where $1::inet <<= subnet and type = $2`, ip, listType)
+	var searchedSubnet string
 
-	for rows.Next() {
-		var searchedSubnet string
-
-		err := rows.Scan(&searchedSubnet)
-		if err != nil {
-			if errors.Is(err, sql.ErrNoRows) {
-				return false, nil
-			}
-
-			return false, err
-		}
-
-		_, subnet, err := net.ParseCIDR(searchedSubnet)
-		if err != nil {
-			return false, err
-		}
-
-		pIP := net.ParseIP(ip)
-
-		if subnet.Contains(pIP) {
-			return true, nil
-		}
-	}
-
-	if err := rows.Close(); err != nil {
+	err := row.Scan(&searchedSubnet)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return false, err
 	}
 
-	return false, nil
+	return searchedSubnet != "", nil
 }
 
 func (c *Client) IsIPInBlacklist(ctx context.Context, ip string) (bool, error) {

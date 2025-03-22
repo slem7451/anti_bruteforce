@@ -1,7 +1,7 @@
 -- +goose Up
 create table ips (
     id serial primary key,
-    subnet varchar(255) not null,
+    subnet inet not null,
     type varchar(1) not null
 );
 
