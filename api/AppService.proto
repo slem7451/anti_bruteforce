@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "./;pb";
+
+service Auth {
+    rpc Auth(Credits) returns (Response);
+    rpc Reset(Credits) returns (Response);
+    rpc AddToBlacklist(Subnet) returns (Response);
+    rpc AddToWhitelist(Subnet) returns (Response);
+    rpc DeleteFromBlacklist(Subnet) returns (Response);
+    rpc DeleteFromWhitelist(Subnet) returns (Response);
+}
+
+message Credits {
+    string login = 1;
+    optional string password = 2;
+    string ip = 3;
+}
+
+message Subnet {
+    string subnet = 1;
+}
+
+message Response {
+    bool ok = 1;
+    optional string msg = 2;
+}

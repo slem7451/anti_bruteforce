@@ -12,6 +12,9 @@ RUN go build -o ./bin/app ./cmd/app
 
 FROM alpine:3.9
 
-COPY --from=build /app/bin/app .
+RUN apk add --no-cache libc6-compat
+
+COPY --from=build ./app/bin/app .
+COPY ./configs ./configs
 
 CMD ["./app"]

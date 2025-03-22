@@ -1,19 +1,30 @@
 version: "3"
 
 services:
-  calendar:
+  anti-bruteforce:
     image: anti-bruteforce
     ports:
       - "8080:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
   redis:
     image: redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_USER: ${REDIS_USER}
       REDIS_USER_PASSWORD: ${REDIS_USER_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
 
   postgres:
     image: postgres
@@ -23,3 +34,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_NAME}"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
