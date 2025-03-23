@@ -7,22 +7,26 @@ toolchain go1.23.1
 require (
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/redis/go-redis/v9 v9.7.1
+	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.4
 )
 
 require (
 	github.com/cockroachdb/apd v1.1.0 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/mfridman/interpolate v0.0.2 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sethvargo/go-retry v0.3.0 // indirect
+	github.com/stretchr/objx v0.5.2 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (

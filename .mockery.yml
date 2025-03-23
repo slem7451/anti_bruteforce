@@ -1,0 +1,15 @@
+all: True
+with-expecter: true
+outpkg: "{{.PackageName}}mock"
+filename: "{{.InterfaceName}}.go"
+packages:
+  github.com/slem7451/anti_bruteforce/internal/app:
+    config:
+      dir: internal/mocks/storage
+    interfaces:
+      list:
+        config:
+          mockname: List
+      limiter:
+        config:
+          mockname: Limiter

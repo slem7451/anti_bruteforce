@@ -4,6 +4,8 @@ build:
 	go build -o ./bin/app ./cmd/app
 
 test:
+	rm -rf internal/mocks
+	docker run --rm -v "$(PWD)":/src -w /src vektra/mockery
 	go test -race -count 100 ./...
 
 install-lint-deps:
