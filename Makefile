@@ -18,7 +18,7 @@ docker-build:
 		-f build/app/Dockerfile .
 
 docker-run: docker-build
-	docker run -d $(DOCKER_APP_IMG)
+	docker run --rm $(DOCKER_APP_IMG)
 
 up:
 	docker compose -f deployments/docker-compose.yml up
