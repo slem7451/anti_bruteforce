@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func TestABLogic(t *testing.T) {
+func TestABLogic(t *testing.T) { //nolint:funlen
 	err := godotenv.Load("../configs/.app.env")
 	require.NoError(t, err)
 
@@ -76,7 +76,7 @@ func TestABLogic(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, true, res.Ok)
 
-	for i := 0; i < ipLim + 1; i++ {
+	for i := 0; i < ipLim+1; i++ {
 		res, err = client.Auth(ctx, &pb.Credits{Ip: "192.168.1.192", Login: "l", Password: &password})
 		require.NoError(t, err)
 		require.Equal(t, true, res.Ok)

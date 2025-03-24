@@ -5,9 +5,11 @@ DOCKER_TEST_IMG="integration-tests"
 build:
 	go build -o ./bin/app ./cmd/app
 
-test:
+generate-mocks:
 	rm -rf internal/mocks
 	docker run --rm -v "$(PWD)":/src -w /src vektra/mockery
+
+test:
 	go test -race -count 100 ./internal/...
 
 integration-tests:

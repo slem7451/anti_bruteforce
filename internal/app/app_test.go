@@ -16,9 +16,9 @@ import (
 
 type Suite struct {
 	suite.Suite
-	ctx context.Context
-	ipLim int
-	loginLim int
+	ctx         context.Context
+	ipLim       int
+	loginLim    int
 	passwordLim int
 }
 
@@ -58,15 +58,27 @@ func (s *Suite) TestLimits() {
 	require.NoError(s.T(), err)
 
 	for i := 0; i < 10; i++ {
-		res, err := app.ValidateAuth(s.ctx, request.Credits{IP: "ip", Login: fmt.Sprintf("%dlogin", i), Password: fmt.Sprintf("%dpassword", i)})
+		res, err := app.ValidateAuth(s.ctx, request.Credits{
+			IP:       "ip",
+			Login:    fmt.Sprintf("%dlogin", i),
+			Password: fmt.Sprintf("%dpassword", i),
+		})
 		require.NoError(s.T(), err)
 		require.Equal(s.T(), true, res)
 
-		res, err = app.ValidateAuth(s.ctx, request.Credits{IP: fmt.Sprintf("%dip", i), Login: "login", Password: fmt.Sprintf("%dpassword", i)})
+		res, err = app.ValidateAuth(s.ctx, request.Credits{
+			IP:       fmt.Sprintf("%dip", i),
+			Login:    "login",
+			Password: fmt.Sprintf("%dpassword", i),
+		})
 		require.NoError(s.T(), err)
 		require.Equal(s.T(), true, res)
 
-		res, err = app.ValidateAuth(s.ctx, request.Credits{IP: fmt.Sprintf("%dip", i), Login: fmt.Sprintf("%dlogin", i), Password: "password"})
+		res, err = app.ValidateAuth(s.ctx, request.Credits{
+			IP:       fmt.Sprintf("%dip", i),
+			Login:    fmt.Sprintf("%dlogin", i),
+			Password: "password",
+		})
 		require.NoError(s.T(), err)
 		require.Equal(s.T(), true, res)
 	}

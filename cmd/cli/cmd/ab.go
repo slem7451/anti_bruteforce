@@ -11,18 +11,20 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var client pb.AuthClient
-var ctx context.Context
-var address string
-var conn *grpc.ClientConn
+var (
+	client  pb.AuthClient
+	ctx     context.Context
+	address string
+	conn    *grpc.ClientConn
+)
 
 func Execute() {
-	var rootCmd = &cobra.Command{
+	rootCmd := &cobra.Command{
 		Use:   "ab",
 		Args:  cobra.MinimumNArgs(1),
 		Short: "CLI к анти-брутфорсу",
 		Long:  `Позволяет управлять black/white листами и сбросить попытки авторизации по логину и IP`,
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		PersistentPreRun: func(_ *cobra.Command, _ []string) {
 			var err error
 
 			conn, err = grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -32,9 +34,9 @@ func Execute() {
 			}
 
 			client = pb.NewAuthClient(conn)
-    		ctx = context.Background()
+			ctx = context.Background()
 		},
-		PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		PersistentPostRun: func(_ *cobra.Command, _ []string) {
 			if conn != nil {
 				conn.Close()
 			}

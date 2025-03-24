@@ -1,4 +1,4 @@
-package cmd
+package cmd //nolint:dupl
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ func addCmd() *cobra.Command {
 	var bType bool
 	var wType bool
 
-	printFunc := func (res *pb.Response, err error) {
+	printFunc := func(res *pb.Response, err error) {
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -28,11 +28,11 @@ func addCmd() *cobra.Command {
 		}
 	}
 
-	var addCmd = &cobra.Command{
+	addCmd := &cobra.Command{
 		Use:   "add-to-list",
 		Short: "Добавить подсеть в black/white лист",
-		Long: `Подсеть вида "IP + маска" добавляется в заданный список`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Long:  `Подсеть вида "IP + маска" добавляется в заданный список`,
+		Run: func(_ *cobra.Command, _ []string) {
 			var res *pb.Response
 			var err error
 

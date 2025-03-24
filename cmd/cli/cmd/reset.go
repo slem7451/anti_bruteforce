@@ -11,10 +11,10 @@ func resetCmd() *cobra.Command {
 	var login string
 	var ip string
 
-	var resetCmd = &cobra.Command{
+	resetCmd := &cobra.Command{
 		Use:   "reset-auth",
 		Short: "Cбросить попытки авторизации по логину и IP",
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			res, err := client.Reset(ctx, &pb.Credits{Login: login, Ip: ip})
 			if err != nil {
 				fmt.Println(err)

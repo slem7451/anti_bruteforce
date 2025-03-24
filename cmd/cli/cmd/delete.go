@@ -1,4 +1,4 @@
-package cmd
+package cmd //nolint:dupl
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ func deleteCmd() *cobra.Command {
 	var bType bool
 	var wType bool
 
-	printFunc := func (res *pb.Response, err error) {
+	printFunc := func(res *pb.Response, err error) {
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -28,11 +28,11 @@ func deleteCmd() *cobra.Command {
 		}
 	}
 
-	var deleteCmd = &cobra.Command{
+	deleteCmd := &cobra.Command{
 		Use:   "delete-from-list",
 		Short: "Удалить подсеть из black/white листа",
-		Long: `Подсеть вида "IP + маска" удаляется из заданного списка`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Long:  `Подсеть вида "IP + маска" удаляется из заданного списка`,
+		Run: func(_ *cobra.Command, _ []string) {
 			var res *pb.Response
 			var err error
 
