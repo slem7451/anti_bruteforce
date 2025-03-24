@@ -1,4 +1,5 @@
 DOCKER_APP_IMG="anti-bruteforce"
+DOCKER_CLI_IMG="anti-bruteforce-cli"
 DOCKER_TEST_IMG="integration-tests"
 
 build:
@@ -36,5 +37,14 @@ up:
 
 down:
 	docker compose -f deployments/docker-compose.yml -d down
+
+cli-build:
+	docker build \
+		-t $(DOCKER_CLI_IMG) \
+		-f build/cli/Dockerfile .
+
+	docker run --name cli-container -d $(DOCKER_CLI_IMG)
+	docker cp cli-container:ab ./bin/ab
+	docker stop cli-container && docker rm cli-container
 
 .PHONY: build
