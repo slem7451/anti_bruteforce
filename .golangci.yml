@@ -17,6 +17,8 @@ linters-settings:
           - google.golang.org/grpc
           - github.com/joho/godotenv
           - github.com/redis/go-redis
+          - github.com/stretchr/testify
+          - github.com/spf13/cobra
 
 linters:
   disable-all: true
